@@ -1,4 +1,6 @@
 using CityManagerApp1.Data;
+using CityManagerApp1.Repository.Abstract;
+using CityManagerApp1.Repository.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
 
 var conn = builder.Configuration.GetConnectionString("Default");
 
@@ -17,6 +21,9 @@ builder.Services.AddDbContext<AppDataContext>(options =>
 {
     options.UseSqlServer(conn);
 });
+
+builder.Services.AddScoped<IAppRepository, AppRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 var app = builder.Build();
 
